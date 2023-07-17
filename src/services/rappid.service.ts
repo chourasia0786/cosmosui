@@ -1,3 +1,4 @@
+import ToolContext  from 'src/components/dashboardWindows/data/ToolContext';
 /*! JointJS+ v3.7.1 - HTML5 Diagramming Framework - TRIAL VERSION
 
 Copyright (c) 2023 client IO
@@ -10,7 +11,7 @@ This Source Code Form is subject to the terms of the JointJS+ Trial License
 file, You can obtain one at https://www.jointjs.com/license
  or from the JointJS+ archive as was distributed by client IO. See the LICENSE file.*/
 
-
+import React from 'react'
 import { Events } from 'backbone';
 import { Subscription } from 'rxjs';
 import { dia, ui } from '@clientio/rappid';
@@ -19,8 +20,10 @@ import { EventBusService } from 'src/services/event-bus.service';
 import { Controller } from 'src/rappid/controller';
 import { createPlugins } from 'src/rappid/plugins';
 import { RappidController, KeyboardController } from 'src/rappid/controllers';
+// import ToolContext from 'src/components/dashboardWindows/data/ToolContext';
 
-export class RappidService {
+export class RappidService extends React.Component {
+    // static contextType = ToolContext;
 
     public controllers: { rappid: Controller, keyboard: Controller };
     public graph: dia.Graph;
@@ -32,7 +35,6 @@ export class RappidService {
     public stencil: ui.Stencil;
     public toolbar: ui.Toolbar;
     public tooltip: ui.Tooltip;
-
     private subscriptions = new Subscription();
 
     constructor(
@@ -41,7 +43,11 @@ export class RappidService {
         stencilElement: Element,
         toolbarElement: Element,
         public readonly eventBusService: EventBusService,
+        public toolbarProjects: Array<string>,
+        public addToolbarElement = ()=>{},
+        public removeToolbarElement = ()=> {}
     ) {
+        super(toolbarProjects);
         Object.assign(this, createPlugins(scopeElement, paperElement, stencilElement, toolbarElement));
         this.controllers = {
             rappid: new RappidController(this),
@@ -51,15 +57,20 @@ export class RappidService {
             // Translate RxJx notifications to Backbone Events
             eventBusService.events().subscribe(({ name, value }) => Events.trigger.call(eventBusService, name, value))
         );
+        this.toolbarProjects = toolbarProjects;
+        this.addToolbarElement = addToolbarElement;
+        this.removeToolbarElement = removeToolbarElement
+
     }
 
     public destroy(): void {
-        const { paper, scroller, stencil, toolbar, tooltip, controllers, subscriptions } = this;
+        const {paper, scroller, stencil, toolbar, tooltip, controllers, subscriptions } = this;
         paper.remove();
         scroller.remove();
         stencil.remove();
         toolbar.remove();
         tooltip.remove();
+
         Object.keys(controllers).forEach(name => controllers[name].stopListening());
         subscriptions.unsubscribe();
     }

@@ -13,7 +13,6 @@ file, You can obtain one at https://www.jointjs.com/license
 
 import { mvc } from '@clientio/rappid';
 import RappidService from 'src/services/rappid.service';
-
 export enum SharedEvents {
     JSON_EDITOR_CHANGED = 'json-editor-changed',
     SELECTION_CHANGED = 'selection-changed',
@@ -23,10 +22,10 @@ export enum SharedEvents {
 }
 
 export abstract class Controller extends mvc.Listener<[RappidService]> {
-
     constructor(public readonly service: RappidService) {
         super(service);
         this.startListening();
+
     }
 
     abstract startListening(): void;

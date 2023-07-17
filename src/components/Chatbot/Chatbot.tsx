@@ -27,20 +27,23 @@ import exampleGraphJSON from 'src/rappid/config/example-graph.json';
 import LeftSideBar from '../sideBar/LeftSideBar';
 import { FormClose } from 'grommet-icons';
 import TabBar from '../dashboardWindows/TabBar';
+import ToolContext from '../dashboardWindows/data/ToolContext';
 interface ChatbotProps {
   window: string;
   show: boolean;
   changeShow: () => {};
   proceed: boolean;
+  toolbarProjects: [];
+  addToolbarElement: () => {};
+  removeToolbarElement: () => {};
 }
 const Chatbot = (props: ChatbotProps): ReactElement => {
   const size = useContext(ResponsiveContext);
-
+  const ctx = useContext(ToolContext);
   const elementRef = useRef(null);
   const toolbarRef = useRef(null);
   const stencilRef = useRef(null);
   const paperRef = useRef(null);
-
   const [rappid, setRappid] = useState(null);
   const [inspectorWidth, setInspectorWidth] = useState(0);
   const [eventBusService] = useState(new EventBusService());
@@ -48,22 +51,6 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
   const [jsonEditorOpened, setJsonEditorOpened] = useState(true);
   const [fileJSON, setFileJSON] = useState(null);
   const [subscriptions] = useState(new Subscription());
-
-  const [toolbarProjects, setToolbarProjects] = useState([]);
-
-  const addToolbarElement = () => {
-    setToolbarProjects((project) => [...project, 'Project 1']);
-  };
-
-  const removeToolbarElement = (): void => {
-    setToolbarProjects((project) => {
-      let a = [];
-      for (let i = 0; i < project.length - 1; i++) {
-        a.push(project[i]);
-      }
-      return a;
-    });
-  };
 
   const openFile = useCallback(
     (json: Object): void => {
@@ -153,7 +140,10 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
         paperRef.current,
         stencilRef.current,
         toolbarRef.current,
-        eventBusService
+        eventBusService,
+        ctx.toolbarProjects,
+        ctx.addToolbarElement,
+        ctx.removeToolbarElement
       )
     );
   }, [eventBusService]);
@@ -189,7 +179,7 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
             proceed={props.proceed}
             show={props.show}
             changeShow={props.changeShow}
-            addToolbarElement={addToolbarElement}
+            addToolbarElement={ctx.addToolbarElement}
             sidebaroptions={dataMigrationOptions}
             title={props.window}
           >
@@ -226,13 +216,13 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
         </Box>
         <Box flex className='main-container'>
           <TabBar
-            toolbarProjects={toolbarProjects}
-            removeToolbarElement={removeToolbarElement}
+            toolbarProjects={ctx.toolbarProjects}
+            removeToolbarElement={ctx.removeToolbarElement}
           />
           <Box flex ref={paperRef} className='paper-container' />
-          <div style={{ display: jsonEditorOpened ? 'initial' : 'none' }}>
+          {/* <div style={{ display: jsonEditorOpened ? 'initial' : 'none' }}>
             <JsonEditor content={fileJSON} />
-          </div>
+          </div> */}
         </Box>
 
         <Inspector />

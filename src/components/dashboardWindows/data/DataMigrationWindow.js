@@ -14,19 +14,36 @@ import JointPage from '../../../pages/JointPage';
 import LeftSideBar from '../../sideBar/LeftSideBar';
 import RightSideBar from '../../sideBar/RightSideBar';
 import { useContext, useEffect, useState } from 'react';
+import exampleGraphJSON from '../../../rappid/config/example-graph.json';
 import DashboardContext from '../../../pages/dashboards/DashboardContext';
 import { Close, FormClose } from 'grommet-icons';
 import { useNavigate } from 'react-router-dom';
-import ToolContext from './TabContext';
+import ToolContext from './ToolContext';
 const DataMigrationWindow = () => {
   const navigate = useNavigate();
+  const [added, setAdded] = useState(0);
 
+  const setting = () => {
+    setAdded((count) => {
+      return count + 1;
+    });
+  };
   const ctx = useContext(DashboardContext);
   const size = useContext(ResponsiveContext);
   const [toolbarProjects, setToolbarProjects] = useState([]);
   const addToolbarElement = () => {
     setToolbarProjects((project) => [...project, 'Project 1']);
+    // localStorage.setItem('toolbBarProjects', toolbarProjects);
   };
+
+  useEffect(() => {
+    localStorage.setItem('toolbarprojects', JSON.stringify(toolbarProjects));
+  }, [toolbarProjects]);
+
+  useEffect(() => {
+    // setToolbarProjects(localStorage.toolbarprojects);
+  }, []);
+
   const removeToolbarElement = () => {
     setToolbarProjects((project) => {
       let a = [];
@@ -35,8 +52,10 @@ const DataMigrationWindow = () => {
       }
       return a;
     });
-    console.log(toolbarProjects.splice(-1, 1));
+    // console.log(toolbarProjects.splice(-1, 1));
+    // localStorage.setItem('jsonDataMigration', JSON.stringify(exampleGraphJSON));
   };
+
   const [show, setShow] = useState(false);
   // console.log(window.innerHeight);
   const changeShow = () => {
@@ -51,7 +70,13 @@ const DataMigrationWindow = () => {
     navigate('/Data/Data Transformation');
   };
   return (
-    <ToolContext.Provider value='h'>
+    <ToolContext.Provider
+      value={{
+        toolbarProjects: toolbarProjects,
+        addToolbarElement: addToolbarElement,
+        removeToolbarElement: removeToolbarElement,
+      }}
+    >
       <Box direction='row-responsive' fill='horizontal' height='150vh'>
         <Box direction='column' justify='center' align='center' flex>
           <Chatbot

@@ -11,17 +11,21 @@ file, You can obtain one at https://www.jointjs.com/license
  or from the JointJS+ archive as was distributed by client IO. See the LICENSE file.*/
 
 import { dia, shapes, util } from '@clientio/rappid';
-
 import RappidService from 'src/services/rappid.service';
 import { Controller, SharedEvents } from 'src/rappid/controller';
 import * as actions from 'src/rappid/actions';
 import { ZOOM_MIN, ZOOM_MAX, ZOOM_STEP } from 'src/theme';
 
+
 const DEBOUNCE_TIME_MS = 500;
 
+
 export class RappidController extends Controller {
+
   startListening() {
-    const { graph, paper, toolbar, history, eventBusService } = this.service;
+    const { graph, paper, toolbar, history, eventBusService, context } = this.service;
+    
+
     this.listenTo(eventBusService, {
       [SharedEvents.GRAPH_START_BATCH]: onGraphStartBatch,
       [SharedEvents.GRAPH_STOP_BATCH]: onGraphStopBatch,
@@ -31,6 +35,8 @@ export class RappidController extends Controller {
       remove: onCellRemove,
       'change:ports': onElementPortsChange,
     });
+    // console.log(this["context"])
+
 
     this.listenTo(history, {
       stack: util.debounce(onHistoryChange, DEBOUNCE_TIME_MS),
@@ -53,6 +59,7 @@ export class RappidController extends Controller {
       'png:pointerclick': onToolbarPNGPointerclick,
     });
   }
+
 }
 
 // Event Bus Service
@@ -72,23 +79,28 @@ function onCellAdd(
   this: {
     add: (
       service: RappidService,
-      cell: dia.Cell,
-      onElementAdd: Function
+      cell: dia.Cell
     ) => void;
     remove: (
       service: RappidService,
       removedCell: dia.Cell<dia.Cell.Attributes, dia.ModelSetOptions>
-    ) => void;
+    
+       ) => void;
     'change:ports': (
       _service: RappidService,
-      message: shapes.app.Message
+      message: shapes.app.Message,
+      
     ) => void;
   },
   service: RappidService,
   cell: dia.Cell,
-  onElementAdd: Function
+
 ): void {
   if (cell.isLink()) return;
+  // console.log(JSON.parse(localStorage.jsonDataMigration).cells.length)
+  // console.log(JSON.parse(localStorage.jsonDataMigration).cells.length)
+  if(JSON.parse(localStorage.jsonDataMigration).cells.length == 0 )
+  {service.addToolbarElement();}
   actions.setSelection(service, [cell]);
   actions.updateLinksRouting(service);
 }
@@ -99,10 +111,15 @@ function onCellRemove(service: RappidService, removedCell: dia.Cell): void {
   actions.setSelection(
     service,
     selection.filter((cell) => cell !== removedCell)
-  );
-  if (removedCell.isElement()) {
-    actions.updateLinksRouting(service);
-  }
+    );
+    if (removedCell.isElement()) {
+      actions.updateLinksRouting(service);
+      // console.log(JSON.parse(localStorage.jsonDataMigration).cells.length)
+    if(JSON.parse(localStorage.jsonDataMigration).cells.length == 1)
+    service.removeToolbarElement();
+    }
+    
+    
 }
 
 function onElementPortsChange(

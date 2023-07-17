@@ -23,6 +23,7 @@ const TabBar = (props) => {
           pad={{ horizontal: 'small' }}
           gap='small'
           border={{ color: 'black', side: 'right' }}
+          key={el.key}
         >
           {el}
           <Box onClick={props.removeToolbarElement}>
