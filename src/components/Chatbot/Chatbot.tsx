@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
   useContext,
+  ChangeEvent,
 } from 'react';
 import { Subscription } from 'rxjs';
 import { Box, ResponsiveContext } from 'grommet';
@@ -35,9 +36,13 @@ interface ChatbotProps {
   proceed: boolean;
   toolbarProjects: [];
   addToolbarElement: () => {};
-  removeToolbarElement: () => {};
+  removeToolbarElement: (el: String) => {};
+  editToolbarElement: () => {};
+  currentToolbar: '';
 }
 const Chatbot = (props: ChatbotProps): ReactElement => {
+  const [fullName, setFullName] = useState('Joe Abraham');
+  const [showInputEle, setShowInputEle] = useState(false);
   const size = useContext(ResponsiveContext);
   const ctx = useContext(ToolContext);
   const elementRef = useRef(null);
@@ -51,7 +56,7 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
   const [jsonEditorOpened, setJsonEditorOpened] = useState(true);
   const [fileJSON, setFileJSON] = useState(null);
   const [subscriptions] = useState(new Subscription());
-
+  const [fullJson, setFullJson] = useState(exampleGraphJSON);
   const openFile = useCallback(
     (json: Object): void => {
       setFileJSON(json);
@@ -63,14 +68,15 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
 
   const onStart = useCallback((): void => {
     loadStencilShapes(rappid, props.window);
-    if (props.window == 'Data Migration' && localStorage.jsonDataMigration)
+    if (props.window == 'Data Migration' && localStorage.jsonDataMigration) {
       openFile(JSON.parse(localStorage.jsonDataMigration));
-    else if (
+      fullJson.tabs[1].tab2.cells = localStorage.jsonDataMigration['cells'];
+    } else if (
       props.window == 'Data Transformation' &&
       localStorage.jsonDataTransformation
     )
       openFile(JSON.parse(localStorage.jsonDataTransformation));
-    else openFile(exampleGraphJSON);
+    else openFile(exampleGraphJSON.tabs[1].tab2);
   }, [rappid, openFile]);
 
   const onJsonEditorChange = useCallback(
@@ -84,10 +90,12 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
 
   const onRappidGraphChange = useCallback((json: Object): void => {
     setFileJSON(json);
-    if (props.window == 'Data Transformation')
+    if (props.window == 'Data Transformation') {
       localStorage.setItem('jsonDataTransformation', JSON.stringify(json));
+    }
     if (props.window == 'Data Migration')
       localStorage.setItem('jsonDataMigration', JSON.stringify(json));
+    fullJson.tabs[1].tab2.cells = json['cells'];
   }, []);
 
   const onStencilToggle = useCallback((): void => {
@@ -142,6 +150,7 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
         toolbarRef.current,
         eventBusService,
         ctx.toolbarProjects,
+        ctx.currentToolbar,
         ctx.addToolbarElement,
         ctx.removeToolbarElement
       )
@@ -216,8 +225,11 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
         </Box>
         <Box flex className='main-container'>
           <TabBar
+            currentToolbar={ctx.currentToolbar}
+            showInputEle={showInputEle}
             toolbarProjects={ctx.toolbarProjects}
             removeToolbarElement={ctx.removeToolbarElement}
+            editToolbarElement={ctx.editToolbarElement}
           />
           <Box flex ref={paperRef} className='paper-container' />
           {/* <div style={{ display: jsonEditorOpened ? 'initial' : 'none' }}>

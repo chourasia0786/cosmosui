@@ -2,6 +2,7 @@ import {React, useState} from 'react';
 import { Box } from 'grommet';
 import { FormClose } from 'grommet-icons';
 const TabBar = (props) => {
+  const [showInputEle, setShowInputEle] = useState(false);
     
 
     return (
@@ -18,15 +19,34 @@ const TabBar = (props) => {
       return (
         <Box
           direction='row-responsive'
-          background='white'
+          background={props.currentToolbar == el ? '#00739D' : 'white'}
           align='center'
           pad={{ horizontal: 'small' }}
           gap='small'
           border={{ color: 'black', side: 'right' }}
           key={el.key}
         >
-          {el}
-          <Box onClick={props.removeToolbarElement}>
+          {/* {el} */}
+          {
+        // Use JavaScript's ternary operator to specify <span>'s inner content
+        showInputEle ? (
+          <input
+            type='text'
+            value={el}
+            onChange={(e) => props.editToolbarElement(e.target.value, el)}
+            onBlur={() => setShowInputEle(false)}
+            autoFocus
+          />
+        ) : (
+          <Box
+            onDoubleClick={() => setShowInputEle(true)}
+            
+          >
+            {el}
+          </Box>
+        )
+      }
+          <Box onClick={()=>{props.removeToolbarElement(el)}}>
             <FormClose/>
           </Box>
         </Box>

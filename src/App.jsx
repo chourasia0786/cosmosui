@@ -11,7 +11,9 @@ import { AppFooter } from './components/footer/AppFooter';
 import NavBar from './components/navBar/NavBar';
 import { useContext, useState } from 'react';
 import convertToSVG from './utils/convertToSVG';
+import ElementMaker from './ElementMaker';
 const App = () => {
+
 const [selectedButton, setSelectedButton] = useState(false)
   const name = "Sumit Mandlik";
 const handleprop = () => {
@@ -33,7 +35,7 @@ const handleprop = () => {
     return initials;
   };
     return (
-        <Grommet theme={hpe} full >
+        <Grommet theme={hpe} full >   
       {/* <Box height='100%' overflow={{vertical:'scroll'}}> */}
  
         <NavBar initials={getInitials} selectedButton={selectedButton} setSelectedHandle={setSelectedButton} onOpenProfilePopup={handleprop} />

@@ -109,7 +109,11 @@ const RightSideBar = (props) => {
           items={[
             {
               label: (
-                <Box style={{ color: '#00567A' }} alignSelf='center'>
+                <Box
+                  onClick={props.addToolbarElement}
+                  style={{ color: '#00567A' }}
+                  alignSelf='center'
+                >
                   Create packages
                 </Box>
               ),

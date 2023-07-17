@@ -3,7 +3,9 @@ import React, { createContext } from 'react';
 const ToolContext = createContext({
   toolbarProjects: [],
   addToolbarElement: (el) => {},
-  removeToolbarElement: () => {},
+  removeToolbarElement: (el) => {},
+  editToolbarElement: () => {},
+  currentToolbar: '',
 });
 
 export default ToolContext;

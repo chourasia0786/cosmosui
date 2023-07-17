@@ -30,9 +30,14 @@ const DataMigrationWindow = () => {
   };
   const ctx = useContext(DashboardContext);
   const size = useContext(ResponsiveContext);
-  const [toolbarProjects, setToolbarProjects] = useState([]);
+  const [toolbarProjects, setToolbarProjects] = useState(
+    exampleGraphJSON.tabs.map((el) => Object.keys(el)[0].toString())
+  );
+  const [currentToolbar, setCurrentToolbar] = useState(
+    Object.keys(exampleGraphJSON.tabs[0])[0].toString()
+  );
   const addToolbarElement = () => {
-    setToolbarProjects((project) => [...project, 'Project 1']);
+    setToolbarProjects((project) => [...project, 'tab1']);
     // localStorage.setItem('toolbBarProjects', toolbarProjects);
   };
 
@@ -44,16 +49,32 @@ const DataMigrationWindow = () => {
     // setToolbarProjects(localStorage.toolbarprojects);
   }, []);
 
-  const removeToolbarElement = () => {
+  const removeToolbarElement = (el) => {
     setToolbarProjects((project) => {
       let a = [];
-      for (let i = 0; i < project.length - 1; i++) {
+      for (let i = 0; i < project.length; i++) {
         a.push(project[i]);
       }
+      let i = 0;
+      while (a[i] != el) i++;
+      a.splice(i, 1);
       return a;
     });
+
     // console.log(toolbarProjects.splice(-1, 1));
     // localStorage.setItem('jsonDataMigration', JSON.stringify(exampleGraphJSON));
+  };
+  const editToolbarElement = (value, el) => {
+    setToolbarProjects((project) => {
+      let a = [];
+      for (let i = 0; i < project.length; i++) {
+        a.push(project[i]);
+      }
+      let i = 0;
+      while (a[i] != el) i++;
+      a[i] = value;
+      return a;
+    });
   };
 
   const [show, setShow] = useState(false);
@@ -73,8 +94,10 @@ const DataMigrationWindow = () => {
     <ToolContext.Provider
       value={{
         toolbarProjects: toolbarProjects,
+        currentToolbar: currentToolbar,
         addToolbarElement: addToolbarElement,
         removeToolbarElement: removeToolbarElement,
+        editToolbarElement: editToolbarElement,
       }}
     >
       <Box direction='row-responsive' fill='horizontal' height='150vh'>
@@ -173,7 +196,10 @@ const DataMigrationWindow = () => {
           )}
         </Box>
 
-        <RightSideBar window='Data Migration' />
+        <RightSideBar
+          addToolbarElement={addToolbarElement}
+          window='Data Migration'
+        />
       </Box>
     </ToolContext.Provider>
   );

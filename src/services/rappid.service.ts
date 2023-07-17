@@ -44,8 +44,10 @@ export class RappidService extends React.Component {
         toolbarElement: Element,
         public readonly eventBusService: EventBusService,
         public toolbarProjects: Array<string>,
+        public currentToolbar = '',
         public addToolbarElement = ()=>{},
-        public removeToolbarElement = ()=> {}
+        public removeToolbarElement = (el:String)=> {},
+        public editToolbarElement = ()=>{},
     ) {
         super(toolbarProjects);
         Object.assign(this, createPlugins(scopeElement, paperElement, stencilElement, toolbarElement));
@@ -60,6 +62,8 @@ export class RappidService extends React.Component {
         this.toolbarProjects = toolbarProjects;
         this.addToolbarElement = addToolbarElement;
         this.removeToolbarElement = removeToolbarElement
+        this.editToolbarElement = editToolbarElement
+        this.currentToolbar = currentToolbar
 
     }
 

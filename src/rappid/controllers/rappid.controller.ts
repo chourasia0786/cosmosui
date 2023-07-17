@@ -99,7 +99,7 @@ function onCellAdd(
   if (cell.isLink()) return;
   // console.log(JSON.parse(localStorage.jsonDataMigration).cells.length)
   // console.log(JSON.parse(localStorage.jsonDataMigration).cells.length)
-  if(JSON.parse(localStorage.jsonDataMigration).cells.length == 0 )
+  if(JSON.parse(localStorage.jsonDataMigration).cells.length == 0 && JSON.parse(localStorage.toolbarprojects).length == 0)
   {service.addToolbarElement();}
   actions.setSelection(service, [cell]);
   actions.updateLinksRouting(service);
@@ -116,7 +116,7 @@ function onCellRemove(service: RappidService, removedCell: dia.Cell): void {
       actions.updateLinksRouting(service);
       // console.log(JSON.parse(localStorage.jsonDataMigration).cells.length)
     if(JSON.parse(localStorage.jsonDataMigration).cells.length == 1)
-    service.removeToolbarElement();
+    service.removeToolbarElement("tab1");
     }
     
     
