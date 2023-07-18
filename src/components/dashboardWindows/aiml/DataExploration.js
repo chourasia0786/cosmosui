@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FormNext } from "grommet-icons";
 import {
   Box,
@@ -12,16 +12,19 @@ import {
   Spinner,
 } from "grommet";
 import TableCustomizationExample from "./DataTable";
+import ActivePageContext from "./ActivePageContext";
 
 const DataExploration = () => {
   const [index, setIndex] = useState();
   const onActive = (nextIndex) => setIndex(nextIndex);
   const [showSpinner, setShowSpinner] = useState(false);
   const [startProcessSatus, setStartProcessSatus] = useState(false);
+  const ctx = useContext(ActivePageContext);
 
   const startProcess = () => {
     handleSpinner();
     setStartProcessSatus(true);
+    ctx.setActivePageNumber(1);
   };
 
   const handleSpinner = (e) => {
