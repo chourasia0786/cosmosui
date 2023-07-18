@@ -17,6 +17,7 @@ import { useContext, useEffect, useState } from 'react';
 import DashboardContext from '../../../pages/dashboards/DashboardContext';
 import { Close, FormClose } from 'grommet-icons';
 import { useNavigate } from 'react-router-dom';
+import ToolContext from './TabContext';
 const DataMigrationWindow = () => {
   const navigate = useNavigate();
 
@@ -50,104 +51,106 @@ const DataMigrationWindow = () => {
     navigate('/Data/Data Transformation');
   };
   return (
-    <Box direction='row-responsive' fill='horizontal' height='150vh'>
-      <Box direction='column' justify='center' align='center' flex>
-        <Chatbot
-          proceed
-          show={show}
-          changeShow={changeShow}
-          flex
-          justify='center'
-          window='Data Migration'
-          align='center'
-        />
+    <ToolContext.Provider value='h'>
+      <Box direction='row-responsive' fill='horizontal' height='150vh'>
+        <Box direction='column' justify='center' align='center' flex>
+          <Chatbot
+            proceed
+            show={show}
+            changeShow={changeShow}
+            flex
+            justify='center'
+            window='Data Migration'
+            align='center'
+          />
 
-        {show && (
-          <Layer
-            position='center'
-            onEsc={() => setShow(false)}
-            onClickOutside={() => setShow(false)}
-          >
-            <Box height='100%'>
-              <Card
-                // onClick={() =>
-                //   navigate(`/${props.dashboardType}/${props.title}`)
-                // }
-                height='300px'
-                title='Edit Details'
-                background='light'
-                width='100%'
-                footer={<Button label='Update' secondary />}
-              >
-                <Box
-                  height='100%'
-                  direction='column'
-                  pad={{ horizontal: 'medium', vertical: 'medium' }}
-                  // align='center'
-                  justify='between'
+          {show && (
+            <Layer
+              position='center'
+              onEsc={() => setShow(false)}
+              onClickOutside={() => setShow(false)}
+            >
+              <Box height='100%'>
+                <Card
+                  // onClick={() =>
+                  //   navigate(`/${props.dashboardType}/${props.title}`)
+                  // }
+                  height='300px'
+                  title='Edit Details'
+                  background='light'
+                  width='100%'
+                  footer={<Button label='Update' secondary />}
                 >
-                  <Box>
-                    <Text>Migration Details</Text>
-                  </Box>
-                  <Box>
-                    <Box direction='row-responsive' gap='medium'>
-                      <Text weight='bold'>Source</Text> <Text>Source 1</Text>
-                    </Box>
-                    <Box direction='row-responsive' gap='medium'>
-                      <Text weight='bold'>Target</Text> <Text>Target 1</Text>
-                    </Box>
-                  </Box>
                   <Box
-                    background='#17EBA03D'
-                    style={{ borderRadius: '10px' }}
-                    direction='row-responsive'
-                    gap='small'
-                    pad='xsmall'
-                    fill='horizontal'
+                    height='100%'
+                    direction='column'
+                    pad={{ horizontal: 'medium', vertical: 'medium' }}
+                    // align='center'
+                    justify='between'
                   >
+                    <Box>
+                      <Text>Migration Details</Text>
+                    </Box>
+                    <Box>
+                      <Box direction='row-responsive' gap='medium'>
+                        <Text weight='bold'>Source</Text> <Text>Source 1</Text>
+                      </Box>
+                      <Box direction='row-responsive' gap='medium'>
+                        <Text weight='bold'>Target</Text> <Text>Target 1</Text>
+                      </Box>
+                    </Box>
                     <Box
-                      width='15px'
-                      height='15px'
-                      margin={{ left: 'small', top: 'small' }}
-                      style={{
-                        backgroundColor: '#17EBA0',
-                        borderRadius: '7.5px',
-                      }}
-                    ></Box>
+                      background='#17EBA03D'
+                      style={{ borderRadius: '10px' }}
+                      direction='row-responsive'
+                      gap='small'
+                      pad='xsmall'
+                      fill='horizontal'
+                    >
+                      <Box
+                        width='15px'
+                        height='15px'
+                        margin={{ left: 'small', top: 'small' }}
+                        style={{
+                          backgroundColor: '#17EBA0',
+                          borderRadius: '7.5px',
+                        }}
+                      ></Box>
 
-                    <Box flex>
-                      <Text>Migrated</Text>
-                      <Text size='xsmall'>
-                        Data Migration successfully completed
+                      <Box flex>
+                        <Text>Migrated</Text>
+                        <Text size='xsmall'>
+                          Data Migration successfully completed
+                        </Text>
+                      </Box>
+                    </Box>
+                    <Box direction='row-responsive' gap='xsmall'>
+                      <Text>Do you want to proceed for</Text>
+                      <Text weight='bold' color='black'>
+                        Data Transformation?
                       </Text>
                     </Box>
+                    <Box direction='row-responsive' gap='small'>
+                      <Button
+                        label='Proceed'
+                        primary
+                        onClick={() => {
+                          setShow(false);
+                          navigate('/Data/Data Transformation');
+                        }}
+                      />
+                      <Button label='Close' onClick={() => setShow(false)} />
+                    </Box>
                   </Box>
-                  <Box direction='row-responsive' gap='xsmall'>
-                    <Text>Do you want to proceed for</Text>
-                    <Text weight='bold' color='black'>
-                      Data Transformation?
-                    </Text>
-                  </Box>
-                  <Box direction='row-responsive' gap='small'>
-                    <Button
-                      label='Proceed'
-                      primary
-                      onClick={() => {
-                        setShow(false);
-                        navigate('/Data/Data Transformation');
-                      }}
-                    />
-                    <Button label='Close' onClick={() => setShow(false)} />
-                  </Box>
-                </Box>
-              </Card>
-            </Box>
-          </Layer>
-        )}
-      </Box>
+                </Card>
+              </Box>
+            </Layer>
+          )}
+        </Box>
 
-      <RightSideBar window='Data Migration' />
-    </Box>
+        <RightSideBar window='Data Migration' />
+      </Box>
+    </ToolContext.Provider>
   );
 };
 
