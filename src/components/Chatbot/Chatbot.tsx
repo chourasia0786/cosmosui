@@ -39,6 +39,27 @@ interface ChatbotProps {
   removeToolbarElement: (el: String) => {};
   editToolbarElement: () => {};
   currentToolbar: '';
+  setCurrentToolBar: (el: String) => {};
+  fullJson: {
+    tabs: [
+      {
+        tab1: {
+          cells: [];
+        };
+      },
+      {
+        tab2: {
+          cells: [];
+        };
+      },
+      {
+        tab3: {
+          cells: [];
+        };
+      }
+    ];
+  };
+  setFullJson: (elem: any) => {};
 }
 const Chatbot = (props: ChatbotProps): ReactElement => {
   const [fullName, setFullName] = useState('Joe Abraham');
@@ -56,7 +77,6 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
   const [jsonEditorOpened, setJsonEditorOpened] = useState(true);
   const [fileJSON, setFileJSON] = useState(null);
   const [subscriptions] = useState(new Subscription());
-  const [fullJson, setFullJson] = useState(exampleGraphJSON);
   const openFile = useCallback(
     (json: Object): void => {
       setFileJSON(json);
@@ -67,17 +87,34 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
   );
 
   const onStart = useCallback((): void => {
+    localStorage.removeItem('jsonDataMigration');
     loadStencilShapes(rappid, props.window);
-    if (props.window == 'Data Migration' && localStorage.jsonDataMigration) {
-      openFile(JSON.parse(localStorage.jsonDataMigration));
-      fullJson.tabs[1].tab2.cells = localStorage.jsonDataMigration['cells'];
-    } else if (
-      props.window == 'Data Transformation' &&
-      localStorage.jsonDataTransformation
-    )
-      openFile(JSON.parse(localStorage.jsonDataTransformation));
-    else openFile(exampleGraphJSON.tabs[1].tab2);
-  }, [rappid, openFile]);
+    openFile(
+      props.fullJson.tabs.filter(
+        (el) => Object.keys(el)[0] == ctx.currentToolbar
+      )[0][ctx.currentToolbar]
+    );
+    // console.log(localStorage.jsonDataMigration);
+    // if (props.window == 'Data Migration') {
+    //   if (localStorage.getItem('jsonDataMigration') != null) {
+    //     console.log('inside condition');
+    // openFile(JSON.parse(localStorage.jsonDataMigration));
+    //   } else {
+    //     console.log('inside nested condition');
+    //     console.log(exampleGraphJSON.tabs[0][ctx.currentToolbar]);
+    //     openFile(exampleGraphJSON.tabs[0]['tab2']);
+    //   }
+    // } else if (
+    //   props.window == 'Data Transformation' &&
+    //   localStorage.jsonDataTransformation
+    // )
+    //   openFile(JSON.parse(localStorage.jsonDataTransformation));
+    // else {
+    //   console.log('inside no condition');
+
+    //   openFile(exampleGraphJSON.tabs[0].tab1);
+    // }
+  }, [rappid, openFile, ctx.currentToolbar]);
 
   const onJsonEditorChange = useCallback(
     (json: Object): void => {
@@ -88,15 +125,35 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
     [rappid]
   );
 
-  const onRappidGraphChange = useCallback((json: Object): void => {
-    setFileJSON(json);
-    if (props.window == 'Data Transformation') {
-      localStorage.setItem('jsonDataTransformation', JSON.stringify(json));
-    }
-    if (props.window == 'Data Migration')
-      localStorage.setItem('jsonDataMigration', JSON.stringify(json));
-    fullJson.tabs[1].tab2.cells = json['cells'];
-  }, []);
+  const onRappidGraphChange = useCallback(
+    (json: Object): void => {
+      setFileJSON(json);
+      // if (props.window == 'Data Transformation') {
+      //   localStorage.setItem('jsonDataTransformation', JSON.stringify(json));
+      // }
+      if (props.window == 'Data Migration') {
+        localStorage.setItem('jsonDataMigration', JSON.stringify(json));
+        props.setFullJson(json);
+      }
+      // console.log(
+      //   props.fullJson.tabs.filter(
+      //     (el) => Object.keys(el)[0] === ctx.currentToolbar
+      //   )[0]
+      // );
+      // console.log(ctx.currentToolbar + 'hii');
+      // props.setFullJson((elem: any) => {
+      //   elem.tabs.filter(
+      //     (el: any) => Object.keys(el)[0] === ctx.currentToolbar
+      //   )[0][ctx.currentToolbar].cells = JSON.parse(
+      //     localStorage.getItem('jsonDataMigration')
+      //   );
+      //   return elem;
+      // });
+
+      // console.log(props.fullJson);
+    },
+    [ctx.currentToolbar]
+  );
 
   const onStencilToggle = useCallback((): void => {
     if (!rappid) {
@@ -152,10 +209,12 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
         ctx.toolbarProjects,
         ctx.currentToolbar,
         ctx.addToolbarElement,
-        ctx.removeToolbarElement
+        ctx.removeToolbarElement,
+        ctx.editToolbarElement,
+        ctx.setCurrentToolBar
       )
     );
-  }, [eventBusService]);
+  }, [eventBusService, ctx.currentToolbar, ctx.toolbarProjects]);
 
   useEffect(() => {
     if (!rappid) {
@@ -163,17 +222,18 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
     }
     setStencilContainerSize();
     onStart();
-  }, [rappid, onStart, setStencilContainerSize]);
+  }, [rappid, onStart, setStencilContainerSize, ctx.currentToolbar]);
 
   useEffect(() => {
     if (!rappid) {
       return;
     }
+
     return () => {
       subscriptions.unsubscribe();
       rappid.destroy();
     };
-  }, [rappid, subscriptions]);
+  }, [rappid, subscriptions, ctx.currentToolbar]);
 
   return (
     <EventBusServiceContext.Provider value={eventBusService}>
@@ -230,11 +290,12 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
             toolbarProjects={ctx.toolbarProjects}
             removeToolbarElement={ctx.removeToolbarElement}
             editToolbarElement={ctx.editToolbarElement}
+            setCurrentToolBar={ctx.setCurrentToolBar}
           />
           <Box flex ref={paperRef} className='paper-container' />
-          {/* <div style={{ display: jsonEditorOpened ? 'initial' : 'none' }}>
+          <div style={{ display: jsonEditorOpened ? 'initial' : 'none' }}>
             <JsonEditor content={fileJSON} />
-          </div> */}
+          </div>
         </Box>
 
         <Inspector />

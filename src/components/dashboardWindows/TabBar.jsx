@@ -15,7 +15,7 @@ const TabBar = (props) => {
     direction='row-responsive'
     height='24px'
   >
-    {props.toolbarProjects.map((el) => {
+    {props.toolbarProjects.map((el,index) => {
       return (
         <Box
           direction='row-responsive'
@@ -24,7 +24,8 @@ const TabBar = (props) => {
           pad={{ horizontal: 'small' }}
           gap='small'
           border={{ color: 'black', side: 'right' }}
-          key={el.key}
+          key={index}
+          onClick={()=>{props.setCurrentToolBar(el)}}
         >
           {/* {el} */}
           {
@@ -36,13 +37,13 @@ const TabBar = (props) => {
             onChange={(e) => props.editToolbarElement(e.target.value, el)}
             onBlur={() => setShowInputEle(false)}
             autoFocus
+            key={index}
           />
         ) : (
           <Box
             onDoubleClick={() => setShowInputEle(true)}
-            
           >
-            {el}
+            {el}.dtxs
           </Box>
         )
       }

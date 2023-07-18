@@ -6,6 +6,7 @@ const ToolContext = createContext({
   removeToolbarElement: (el) => {},
   editToolbarElement: () => {},
   currentToolbar: '',
+  setCurrentToolBar: (el) => {},
 });
 
 export default ToolContext;

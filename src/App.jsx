@@ -17,7 +17,7 @@ const App = () => {
 const [selectedButton, setSelectedButton] = useState(false)
   const name = "Sumit Mandlik";
 const handleprop = () => {
-      console.log("Click here");
+      // console.log("Click here");
       setSelectedButton(true);
     };
     const handleCancel = () => {

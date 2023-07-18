@@ -36,7 +36,8 @@ export class RappidService extends React.Component {
     public toolbar: ui.Toolbar;
     public tooltip: ui.Tooltip;
     private subscriptions = new Subscription();
-
+    public static currentToolbar  : String;
+    public static setCurrentToolBar : (el:String) => void
     constructor(
         private scopeElement: Element,
         paperElement: Element,
@@ -44,10 +45,11 @@ export class RappidService extends React.Component {
         toolbarElement: Element,
         public readonly eventBusService: EventBusService,
         public toolbarProjects: Array<string>,
-        public currentToolbar = '',
+        public currentToolbar : String,
         public addToolbarElement = ()=>{},
         public removeToolbarElement = (el:String)=> {},
         public editToolbarElement = ()=>{},
+        public setCurrentToolBar = (el:String) =>{}
     ) {
         super(toolbarProjects);
         Object.assign(this, createPlugins(scopeElement, paperElement, stencilElement, toolbarElement));
@@ -63,7 +65,8 @@ export class RappidService extends React.Component {
         this.addToolbarElement = addToolbarElement;
         this.removeToolbarElement = removeToolbarElement
         this.editToolbarElement = editToolbarElement
-        this.currentToolbar = currentToolbar
+        RappidService.currentToolbar = currentToolbar
+        RappidService.setCurrentToolBar = setCurrentToolBar
 
     }
 

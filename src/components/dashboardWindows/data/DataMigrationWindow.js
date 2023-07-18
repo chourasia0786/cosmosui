@@ -19,7 +19,10 @@ import DashboardContext from '../../../pages/dashboards/DashboardContext';
 import { Close, FormClose } from 'grommet-icons';
 import { useNavigate } from 'react-router-dom';
 import ToolContext from './ToolContext';
+import { useCallback } from 'react';
+
 const DataMigrationWindow = () => {
+  const [fullJson, setFullJson] = useState(exampleGraphJSON);
   const navigate = useNavigate();
   const [added, setAdded] = useState(0);
 
@@ -36,6 +39,35 @@ const DataMigrationWindow = () => {
   const [currentToolbar, setCurrentToolbar] = useState(
     Object.keys(exampleGraphJSON.tabs[0])[0].toString()
   );
+
+  const setCurrentToolBar = (tab) => {
+    // console.log(
+    //   fullJson.tabs.filter((el) => Object.keys(el)[0] === currentToolbar)[0][
+    //     currentToolbar
+    //   ]
+    // );
+
+    setFullJson((el) => {
+      el.tabs.filter((el) => Object.keys(el)[0] === currentToolbar)[0][
+        currentToolbar
+      ] = JSON.parse(localStorage.getItem('jsonDataMigration'));
+      return el;
+    });
+    setCurrentToolbar(tab);
+    // console.log(
+    //   exampleGraphJSON.tabs.filter(
+    //     (el) => Object.keys(el) == currentToolbar
+    //   )[0][currentToolbar]
+    // );
+    // localStorage.setItem(
+    //   'jsonDataMigration',
+    //   JSON.stringify(
+    //     fullJson.tabs.filter((el) => Object.keys(el)[0] == currentToolbar)[0][
+    //       currentToolbar
+    //     ]
+    //   )
+    // );
+  };
   const addToolbarElement = () => {
     setToolbarProjects((project) => [...project, 'tab1']);
     // localStorage.setItem('toolbBarProjects', toolbarProjects);
@@ -43,27 +75,32 @@ const DataMigrationWindow = () => {
 
   useEffect(() => {
     localStorage.setItem('toolbarprojects', JSON.stringify(toolbarProjects));
+    // console.log(JSON.parse(localStorage.toolbarprojects)[0]);
+    if (JSON.parse(localStorage.toolbarprojects)[0] === undefined)
+      setCurrentToolBar(JSON.parse(localStorage.toolbarprojects)[0].toString());
+    else {
+      // localStorage.setItem('toolbarprojects', JSON.stringify(['tab1']));
+    }
   }, [toolbarProjects]);
 
-  useEffect(() => {
-    // setToolbarProjects(localStorage.toolbarprojects);
-  }, []);
+  const removeToolbarElement = useCallback(
+    (el) => {
+      setToolbarProjects((project) => {
+        let a = [];
+        for (let i = 0; i < project.length; i++) {
+          a.push(project[i]);
+        }
+        let i = 0;
+        while (a[i] != el) i++;
+        a.splice(i, 1);
+        return a;
+      });
 
-  const removeToolbarElement = (el) => {
-    setToolbarProjects((project) => {
-      let a = [];
-      for (let i = 0; i < project.length; i++) {
-        a.push(project[i]);
-      }
-      let i = 0;
-      while (a[i] != el) i++;
-      a.splice(i, 1);
-      return a;
-    });
-
-    // console.log(toolbarProjects.splice(-1, 1));
-    // localStorage.setItem('jsonDataMigration', JSON.stringify(exampleGraphJSON));
-  };
+      // console.log(toolbarProjects.splice(-1, 1));
+      // localStorage.setItem('jsonDataMigration', JSON.stringify(exampleGraphJSON));
+    },
+    [toolbarProjects, currentToolbar]
+  );
   const editToolbarElement = (value, el) => {
     setToolbarProjects((project) => {
       let a = [];
@@ -71,12 +108,18 @@ const DataMigrationWindow = () => {
         a.push(project[i]);
       }
       let i = 0;
-      while (a[i] != el) i++;
+      while (a[i] !== el) i++;
       a[i] = value;
       return a;
     });
   };
-
+  const setFullJsonObject = (json) => {
+    setFullJson((js) => {
+      js.tabs.filter((el) => Object.keys(el)[0] == ctx.currentToolbar)[0] =
+        json;
+      return js;
+    });
+  };
   const [show, setShow] = useState(false);
   // console.log(window.innerHeight);
   const changeShow = () => {
@@ -98,6 +141,7 @@ const DataMigrationWindow = () => {
         addToolbarElement: addToolbarElement,
         removeToolbarElement: removeToolbarElement,
         editToolbarElement: editToolbarElement,
+        setCurrentToolBar: setCurrentToolBar,
       }}
     >
       <Box direction='row-responsive' fill='horizontal' height='150vh'>
@@ -110,6 +154,8 @@ const DataMigrationWindow = () => {
             justify='center'
             window='Data Migration'
             align='center'
+            fullJson={fullJson}
+            setFullJson={setFullJsonObject}
           />
 
           {show && (
