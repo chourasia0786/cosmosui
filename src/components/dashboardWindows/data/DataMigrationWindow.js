@@ -25,7 +25,7 @@ const DataMigrationWindow = () => {
   const [fullJson, setFullJson] = useState(exampleGraphJSON);
   const navigate = useNavigate();
   const [added, setAdded] = useState(0);
-
+  const [counter, setCounter] = useState(2);
   const setting = () => {
     setAdded((count) => {
       return count + 1;
@@ -41,12 +41,6 @@ const DataMigrationWindow = () => {
   );
 
   const setCurrentToolBar = (tab) => {
-    // console.log(
-    //   fullJson.tabs.filter((el) => Object.keys(el)[0] === currentToolbar)[0][
-    //     currentToolbar
-    //   ]
-    // );
-
     setFullJson((el) => {
       el.tabs.filter((el) => Object.keys(el)[0] === currentToolbar)[0][
         currentToolbar
@@ -54,11 +48,7 @@ const DataMigrationWindow = () => {
       return el;
     });
     setCurrentToolbar(tab);
-    // console.log(
-    //   exampleGraphJSON.tabs.filter(
-    //     (el) => Object.keys(el) == currentToolbar
-    //   )[0][currentToolbar]
-    // );
+
     // localStorage.setItem(
     //   'jsonDataMigration',
     //   JSON.stringify(
@@ -68,19 +58,31 @@ const DataMigrationWindow = () => {
     //   )
     // );
   };
-  const addToolbarElement = () => {
-    setToolbarProjects((project) => [...project, 'tab1']);
+  const addToolbarElement = useCallback(() => {
+    setToolbarProjects((project) => [...project, `tab${counter}`]);
+    setFullJson((js) => {
+      let a = `tab${counter}`;
+      let p1 = {
+        [a]: {
+          cells: [],
+        },
+      };
+      js.tabs.push(p1);
+      return js;
+    });
+
+    setCounter((coun) => coun + 1);
+
     // localStorage.setItem('toolbBarProjects', toolbarProjects);
-  };
+  }, [toolbarProjects, fullJson, counter, currentToolbar]);
 
   useEffect(() => {
+    console.log('inside set current toolbar');
     localStorage.setItem('toolbarprojects', JSON.stringify(toolbarProjects));
-    // console.log(JSON.parse(localStorage.toolbarprojects)[0]);
-    if (JSON.parse(localStorage.toolbarprojects)[0] === undefined)
+    // if (JSON.parse(localStorage.toolbarprojects)[0] === undefined)
+    if (JSON.parse(localStorage.toolbarprojects).length !== 0)
       setCurrentToolBar(JSON.parse(localStorage.toolbarprojects)[0].toString());
-    else {
-      // localStorage.setItem('toolbarprojects', JSON.stringify(['tab1']));
-    }
+    else addToolbarElement();
   }, [toolbarProjects]);
 
   const removeToolbarElement = useCallback(
@@ -95,11 +97,21 @@ const DataMigrationWindow = () => {
         a.splice(i, 1);
         return a;
       });
+      // setFullJson((js) => {
+      //   js.tabs = js.tabs.filter(
+      //     (tab) => Object.keys(tab)[0] !== el.toString()
+      //   );
 
+      //   return js;
+      // });
+      console.log(
+        'this will be set now' +
+          JSON.parse(localStorage.getItem('toolbarprojects'))[0]
+      );
       // console.log(toolbarProjects.splice(-1, 1));
       // localStorage.setItem('jsonDataMigration', JSON.stringify(exampleGraphJSON));
     },
-    [toolbarProjects, currentToolbar]
+    [toolbarProjects, currentToolbar, fullJson]
   );
   const editToolbarElement = (value, el) => {
     setToolbarProjects((project) => {

@@ -120,7 +120,7 @@ function onCellRemove(service: RappidService, removedCell: dia.Cell): void {
       // console.log(service.currentToolbar)
       // console.log(service.setCurrentToolBar)
     service.removeToolbarElement(service.currentToolbar);
-    RappidService.setCurrentToolBar(service.toolbarProjects[0])}
+  }
   // console.log(RappidService.currentToolbar)
     }
     

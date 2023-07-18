@@ -87,13 +87,24 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
   );
 
   const onStart = useCallback((): void => {
-    localStorage.removeItem('jsonDataMigration');
     loadStencilShapes(rappid, props.window);
-    openFile(
-      props.fullJson.tabs.filter(
-        (el) => Object.keys(el)[0] == ctx.currentToolbar
-      )[0][ctx.currentToolbar]
-    );
+    if (props.window == 'Data Migration') {
+      localStorage.removeItem('jsonDataMigration');
+      console.log(ctx.currentToolbar + 'hiii');
+      openFile(
+        props.fullJson.tabs.filter(
+          (el) => Object.keys(el)[0] == ctx.currentToolbar
+        )[0][ctx.currentToolbar]
+      );
+    }
+    if (props.window == 'Data Transformation') {
+      localStorage.removeItem('jsonTransformation');
+      openFile(
+        props.fullJson.tabs.filter(
+          (el) => Object.keys(el)[0] == ctx.currentToolbar
+        )[0][ctx.currentToolbar]
+      );
+    }
     // console.log(localStorage.jsonDataMigration);
     // if (props.window == 'Data Migration') {
     //   if (localStorage.getItem('jsonDataMigration') != null) {
@@ -128,29 +139,13 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
   const onRappidGraphChange = useCallback(
     (json: Object): void => {
       setFileJSON(json);
-      // if (props.window == 'Data Transformation') {
-      //   localStorage.setItem('jsonDataTransformation', JSON.stringify(json));
-      // }
+      if (props.window == 'Data Transformation') {
+        localStorage.setItem('jsonDataTransformation', JSON.stringify(json));
+      }
       if (props.window == 'Data Migration') {
         localStorage.setItem('jsonDataMigration', JSON.stringify(json));
-        props.setFullJson(json);
       }
-      // console.log(
-      //   props.fullJson.tabs.filter(
-      //     (el) => Object.keys(el)[0] === ctx.currentToolbar
-      //   )[0]
-      // );
-      // console.log(ctx.currentToolbar + 'hii');
-      // props.setFullJson((elem: any) => {
-      //   elem.tabs.filter(
-      //     (el: any) => Object.keys(el)[0] === ctx.currentToolbar
-      //   )[0][ctx.currentToolbar].cells = JSON.parse(
-      //     localStorage.getItem('jsonDataMigration')
-      //   );
-      //   return elem;
-      // });
-
-      // console.log(props.fullJson);
+      props.setFullJson(json);
     },
     [ctx.currentToolbar]
   );
