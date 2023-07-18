@@ -19,7 +19,6 @@ const LeftSideBar = (props) => {
   const size = useContext(ResponsiveContext);
   const searchSuggestions = props.sidebaroptions;
   const ctx = useContext(ActivePageContext);
-
   const navigateFunction = (element) => {
     // ctx.setSelected(true);
     navigate(`/AI/ML/${element}`);
@@ -32,11 +31,12 @@ const LeftSideBar = (props) => {
       round="none"
       border="right"
       height="100%"
-      width={!["xsmall", "small", "medium"].includes(size) ? "17vw" : "150px"}
+      // width={!["xsmall", "small", "medium"].includes(size) ? "17vw" : "150px"}
     >
       <Box
         align="start"
         width="100%"
+        border="bottom"
         pad={{ horizontal: "small", vertical: "xsmall" }}
       >
         <Box>
@@ -51,19 +51,23 @@ const LeftSideBar = (props) => {
 
       <Box
         fill="horizontal"
-        border="top"
+        align="center"
         style={{
-          borderBottom: ctx.selected == "1" ? "2px solid #17EBA0" : "none",
+          borderBottom: ctx.selected == "1" ? "2px solid #17EBA0" : "1px solid",
           cursor: "pointer",
         }}
         direction="hrizontal"
       >
+        {ctx.activePageNumber >= 1 && (
+          <StatusGoodSmall color="status-ok" size="small" />
+        )}
         <Button
           onClick={() => {
             navigateFunction("data exploration");
             ctx.setSelected("1");
           }}
           fill="horizontal"
+          align="start"
           style={{
             fontWeight: "bold",
             borderRadius: "0px",
@@ -71,7 +75,7 @@ const LeftSideBar = (props) => {
             color: "black",
           }}
           label="Data exploration"
-          icon={<StatusGoodSmall color="status-ok" size="small" />}
+          disabled={ctx.activePageNumber >= 1}
         ></Button>
         <FormNext
           size="xlarge"
@@ -83,14 +87,17 @@ const LeftSideBar = (props) => {
 
       <Box
         fill="horizontal"
-        border="top"
         justify="center"
+        align="center"
         style={{
-          borderBottom: ctx.selected == "2" ? "2px solid #17EBA0" : "none",
+          borderBottom: ctx.selected == "2" ? "2px solid #17EBA0" : "1px solid",
           cursor: "pointer",
         }}
         direction="hrizontal"
       >
+        {ctx.activePageNumber >= 2 && (
+          <StatusGoodSmall color="status-ok" size="small" />
+        )}
         <Button
           onClick={() => {
             navigateFunction("identify the data type");
@@ -106,7 +113,7 @@ const LeftSideBar = (props) => {
           }}
           label="Identify the data type"
           // icon={<StatusGoodSmall color="status-ok" size="small" />}
-          // disabled
+          disabled={ctx.activePageNumber !== 1}
         ></Button>
         <FormNext
           size="xlarge"
@@ -118,14 +125,16 @@ const LeftSideBar = (props) => {
       </Box>
       <Box
         fill="horizontal"
-        border="top"
         justify="center"
         style={{
-          borderBottom: ctx.selected == "3" ? "2px solid #17EBA0" : "none",
+          borderBottom: ctx.selected == "3" ? "2px solid #17EBA0" : "1px solid",
           cursor: "pointer",
         }}
         direction="hrizontal"
       >
+        {ctx.activePageNumber == 3 && (
+          <StatusGoodSmall color="status-ok" size="small" />
+        )}
         <Button
           onClick={() => {
             navigateFunction("recommend visualization");
@@ -141,7 +150,7 @@ const LeftSideBar = (props) => {
           }}
           label="Recommend visualization"
           // icon={<StatusGoodSmall color="status-ok" size="small" />}
-          // disabled
+          disabled={ctx.activePageNumber !== 2}
         ></Button>
         <FormNext
           size="xlarge"
