@@ -22,9 +22,9 @@ const COLUMNS = [
     { property: 'CustomerId', header: 'CustomerId' },
     { property: 'CreditScore', header: 'CreditScore' },
     { property: 'Tenure', header: 'Tenure' },
-    { property: 'Balance', header: 'Hours available'},
-    { property: 'EstimatedSalary', header: 'EstimatedSalary'},
-    { property: 'PointEarned', header: 'PointEarned'},
+    { property: 'Balance', header: 'Hours available' },
+    { property: 'EstimatedSalary', header: 'EstimatedSalary' },
+    { property: 'PointEarned', header: 'PointEarned' },
 ];
 
 const allData = [
@@ -35,8 +35,8 @@ const allData = [
         CreditScore: 'int64',
         RowNumber: 'int64',
         CustomerId: 'int64',
-        EstimatedSalary:'float64',
-        PointEarned:'float64',
+        EstimatedSalary: 'float64',
+        PointEarned: 'float64',
 
     },
     {
@@ -56,16 +56,16 @@ const allData = [
         CreditScore: '650.529',
         RowNumber: '5000.5',
         CustomerId: '15690940.57',
-        EstimatedSalary:'1000090.24',
-        PointEarned:'1000090.24'
+        EstimatedSalary: '1000090.24',
+        PointEarned: '1000090.24'
     },
 ];
 
 // Define data structure for DataTableColumns sorting
-const options = COLUMNS.map(({ header, property }) => ({   
+const options = COLUMNS.map(({ header, property }) => ({
     property,
     label: header,
-    style: header === 'header' ? 'font-weight: bold;' : '',
+    // style: header === 'header' ? 'font-weight: bold;' : '',
 }));
 
 // Use options const to define data structure for Data component properties
@@ -89,11 +89,6 @@ const TableCustomizationExample = () => (
     <Page background="background" fill>
         <PageContent>
             <Box gap="medium" margin={{ top: 'medium' }}>
-                {/* <Header pad={{ top: 'medium' }}>
-          <Heading id="users-heading" level={2} margin="none">
-            Users
-          </Heading>
-        </Header> */}
                 <Results />
             </Box>
         </PageContent>
@@ -107,11 +102,6 @@ const Results = () => {
         <Data data={allData} flex properties={properties}>
             <Toolbar>
                 <DataSearch responsive />
-                {/* <DataTableColumns drop options={options} /> */}
-                {/* <DataFilters layer /> */}
-                {/* Flex box for spacing between Data components and Actions button  */}
-                {/* <Box flex /> */}
-                {/* <Menu label="Actions" kind="toolbar" /> */}
             </Toolbar>
             <DataSummary />
             <Box overflow="auto" flex>
