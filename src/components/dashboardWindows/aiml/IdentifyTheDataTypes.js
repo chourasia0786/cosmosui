@@ -21,10 +21,12 @@ const IdentifyTheDataTypes = () => {
       <Box direction="row">
         <Box>
           <h2 size="medium">Identify The Data Types</h2>
-          <h3>Information</h3>
-          <Text>Information for data cleansing</Text>
+          <Box margin={{ top: 'medium' }} width='medium'>
+            <h3>Information</h3>
+            <Text>Information for data cleansing</Text>
+          </Box>
         </Box>
-        <Box margin={{ top: "xlarge", left: "large" }}>
+        <Box margin={{ top: "large", left: "large" }}>
           <Button
             label="Start process"
             secondary
@@ -35,7 +37,7 @@ const IdentifyTheDataTypes = () => {
         </Box>
       </Box>
 
-      <Box>Add content here</Box>
+      <Box margin={{ top: 'large' }}>Add content here</Box>
 
       {showSpinner && (
         <Box>

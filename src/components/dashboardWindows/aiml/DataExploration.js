@@ -33,7 +33,7 @@ const DataExploration = () => {
     setTimeout(() => {
       setShowSpinner(false);
     }, 1000);
-    if ({showSpinner}) { setStartProcessSatus(true) };
+    if ({ showSpinner }) { setStartProcessSatus(true) };
 
   };
 
@@ -42,12 +42,12 @@ const DataExploration = () => {
       <Box direction="row">
         <Box>
           <h2 size="medium">Data Exploration</h2>
-          <Box margin={{top:'medium'}}>
-          <h3>Information</h3>
-          <Text>Information for data explortion</Text>
+          <Box margin={{ top: 'medium' }} width='medium'>
+            <h3>Information</h3>
+            <Text>Information for data explortion</Text>
           </Box>
         </Box>
-        <Box margin={{ top: "large", left: "23%" }}>
+        <Box margin={{ top: "large", left: "large" }}>
           <Button
             label="Start process"
             secondary
