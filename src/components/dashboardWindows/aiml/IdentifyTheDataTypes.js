@@ -5,6 +5,7 @@ import ActivePageContext from "./ActivePageContext";
 const IdentifyTheDataTypes = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const ctx = useContext(ActivePageContext);
+  const [startBtnDisable, setStartBtnDisable] = useState(false);
 
   const handleSpinner = (e) => {
     e.preventDefault();
@@ -14,6 +15,8 @@ const IdentifyTheDataTypes = () => {
     setTimeout(() => {
       setShowSpinner(false);
     }, 1000);
+
+    if (!showSpinner){setStartBtnDisable(true);}
   };
 
   return (
@@ -31,6 +34,7 @@ const IdentifyTheDataTypes = () => {
             label="Start process"
             secondary
             reverse
+            disabled={startBtnDisable}
             icon={<FormNext />}
             onClick={handleSpinner}
           ></Button>

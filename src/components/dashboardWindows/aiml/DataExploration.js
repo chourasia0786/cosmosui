@@ -19,6 +19,7 @@ const DataExploration = () => {
   const onActive = (nextIndex) => setIndex(nextIndex);
   const [showSpinner, setShowSpinner] = useState(false);
   const [startProcessSatus, setStartProcessSatus] = useState(false);
+  const [startBtnDisable, setStartBtnDisable] = useState(false);
   const ctx = useContext(ActivePageContext);
 
   const startProcess = () => {
@@ -34,6 +35,7 @@ const DataExploration = () => {
       setShowSpinner(false);
     }, 1000);
     if ({ showSpinner }) { setStartProcessSatus(true) };
+    if (!showSpinner){setStartBtnDisable(true);}
 
   };
 
@@ -52,6 +54,7 @@ const DataExploration = () => {
             label="Start process"
             secondary
             reverse
+            disabled={startBtnDisable}
             icon={<FormNext />}
             onClick={startProcess}
           ></Button>
