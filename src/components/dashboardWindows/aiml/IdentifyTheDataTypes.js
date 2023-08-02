@@ -1,23 +1,45 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Box, Button, Text, Spinner, Layer } from "grommet";
 import { FormNext } from "grommet-icons";
 import ActivePageContext from "./ActivePageContext";
+import axios from "axios";
+
 const IdentifyTheDataTypes = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const ctx = useContext(ActivePageContext);
   const [startBtnDisable, setStartBtnDisable] = useState(false);
+  const [data, setData] = useState("");
+  const [startProcessSatus, setStartProcessSatus] = useState(false);
+  // const [parsedData, setParsedData] = useState();
 
-  const handleSpinner = (e) => {
-    e.preventDefault();
-    setShowSpinner(true);
-    ctx.setActivePageNumber(2);
+  const dataTypeHeadings = [
+    "Columns",
+    "Data_types",
+  ]
 
-    setTimeout(() => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/data_types"); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
+      setData(JSON.parse(response.data.data_types));
+      // setData(response.data.data_types);
       setShowSpinner(false);
-    }, 1000);
-
-    if (!showSpinner){setStartBtnDisable(true);}
+      console.log("Printing............. : ", data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
+
+  const startProcess = () => {
+    fetchData();
+    setShowSpinner(true);
+    setStartProcessSatus(true);
+    ctx.setActivePageNumber(2);
+  };
+
 
   return (
     <Box>
@@ -36,12 +58,32 @@ const IdentifyTheDataTypes = () => {
             reverse
             disabled={startBtnDisable}
             icon={<FormNext />}
-            onClick={handleSpinner}
+            onClick={startProcess}
           ></Button>
         </Box>
       </Box>
 
-      <Box margin={{ top: 'large' }}>Add content here</Box>
+      {startProcessSatus && (
+        <Box margin={{ top: 'large' }}><table >
+          <thead >
+            <tr>
+              <td style={{ padding: "30px" }}></td>
+              <td style={{ padding: "15px" }}><b>{dataTypeHeadings[0]}</b></td>
+              <td style={{ padding: "15px" }}><b>{dataTypeHeadings[1]}</b></td>
+            </tr>
+          </thead>
+
+          <tbody>
+            {Object.entries(data).map(([key, value]) => (
+                <tr key={key}>
+                <td style={{ padding: "15px" }} ><b>{key}</b></td>
+                <td style={{ padding: "15px" }} >{value.Columns}</td>
+                <td style={{ padding: "15px" }} >{value.Data_types}</td>           
+              </tr>
+            ))}
+          </tbody>
+        </table></Box>)
+      }
 
       {showSpinner && (
         <Box>

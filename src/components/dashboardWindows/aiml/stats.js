@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 
 const StatsDataTable = (props) => {
   const parsedData = JSON.parse(props.data);

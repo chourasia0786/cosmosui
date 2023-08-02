@@ -76,7 +76,7 @@ const DataExploration = () => {
       const response = await axios.get("http://localhost:5000/eda"); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
       setData(response.data);
       setShowSpinner(false);
-      console.log("Printing............. : ", response.data);
+      // console.log("Printing............. : ", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
