@@ -76,7 +76,13 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
 
   const onStart = useCallback((): void => {
     loadStencilShapes(rappid, props.window);
-    if (localStorage.json) openFile(JSON.parse(localStorage.json));
+    if (props.window == 'Data Migration' && localStorage.jsonDataMigration)
+      openFile(JSON.parse(localStorage.jsonDataMigration));
+    else if (
+      props.window == 'Data Transformation' &&
+      localStorage.jsonDataTransformation
+    )
+      openFile(JSON.parse(localStorage.jsonDataTransformation));
     else openFile(exampleGraphJSON);
   }, [rappid, openFile]);
 
@@ -91,7 +97,10 @@ const Chatbot = (props: ChatbotProps): ReactElement => {
 
   const onRappidGraphChange = useCallback((json: Object): void => {
     setFileJSON(json);
-    localStorage.setItem('json', JSON.stringify(json));
+    if (props.window == 'Data Transformation')
+      localStorage.setItem('jsonDataTransformation', JSON.stringify(json));
+    if (props.window == 'Data Migration')
+      localStorage.setItem('jsonDataMigration', JSON.stringify(json));
   }, []);
 
   const onStencilToggle = useCallback((): void => {

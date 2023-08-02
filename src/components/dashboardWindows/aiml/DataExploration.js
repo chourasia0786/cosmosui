@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FormNext } from "grommet-icons";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -11,28 +12,81 @@ import {
   Layer,
   Spinner,
 } from "grommet";
-import TableCustomizationExample from "./DataTable";
+
 import ActivePageContext from "./ActivePageContext";
+import DataTable from "./Chi_square_test";
+import CorrelationDataTable from "./Correlation";
+import StatsDataTable from "./stats";
 
 const DataExploration = () => {
   const [index, setIndex] = useState();
   const onActive = (nextIndex) => setIndex(nextIndex);
   const [showSpinner, setShowSpinner] = useState(false);
   const [startProcessSatus, setStartProcessSatus] = useState(false);
+  const [startBtnDisable, setStartBtnDisable] = useState(false);
   const ctx = useContext(ActivePageContext);
+  const [data, setData] = useState("");
 
-  const startProcess = () => {
-    handleSpinner();
-    setStartProcessSatus(true);
-    ctx.setActivePageNumber(1);
+  const edaHeadings = [
+    "Unnamed",
+    "RowNumber",
+    "CustomerId",
+    "CreditScore",
+    "Age",
+    "Tenure",
+    "Balance",
+    "EstimatedSalary",
+    "Point Earned",
+  ];
+
+  const chiHeadings = [
+    "Surname",
+    "Geography",
+    "Gender",
+    "NumOfProducts",
+    "HasCrCard",
+    "IsActiveMember",
+    "Exited",
+    "Complain",
+    "Satisfaction Score",
+    "Card Type",
+  ];
+
+  const correlationHeadings = [
+    "RowNumber",
+    "CustomerId",
+    "CreditScore",
+    "Age",
+    "Tenure",
+    "Balance",
+    "EstimatedSalary",
+    "Point Earned",
+  ];
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const onSelect = () => {
+    fetchData();
   };
 
-  const handleSpinner = (e) => {
-    setShowSpinner(true);
-
-    setTimeout(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/eda"); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
+      setData(response.data);
       setShowSpinner(false);
-    }, 1000);
+      // console.log("Printing............. : ", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const startProcess = () => {
+    // handleSpinner();
+    setShowSpinner(true);
+    setStartProcessSatus(true);
+    ctx.setActivePageNumber(1);
   };
 
   return (
@@ -40,40 +94,52 @@ const DataExploration = () => {
       <Box direction="row">
         <Box>
           <h2 size="medium">Data Exploration</h2>
-          <h3>Information</h3>
-          <Text>Information for data explortion</Text>
+          <Box margin={{ top: "medium" }} width="medium">
+            <h3>Information</h3>
+            <Text>Information for data explortion</Text>
+          </Box>
         </Box>
-        <Box margin={{ top: "xlarge", left: "large" }}>
+        <Box margin={{ top: "large", left: "large" }}>
           <Button
             label="Start process"
             secondary
             reverse
+            disabled={startBtnDisable}
             icon={<FormNext />}
             onClick={startProcess}
           ></Button>
         </Box>
       </Box>
+
       {startProcessSatus && (
         <Box margin={{ top: "large" }}>
           <Tabs activeIndex={index} onActive={onActive} justify="start">
-            <Tab title="eda_state">
-              <Box>
-                <TableCustomizationExample />
-              </Box>
+            <Tab title="eda_state" onClick={onSelect}>
+              {data && (
+                <Box>
+                  <StatsDataTable data={data.stats} headings={edaHeadings} />
+                </Box>
+              )}
             </Tab>
-            <Tab title="chi_square_results">
-              <Paragraph margin="none">
-                Tab content should be flush with the left edge of the Tab. A
-                "medium" vertical padding should be applied to create space
-                between the Tab and its content.
-              </Paragraph>
+            <Tab title="chi_square_results" onClick={onSelect}>
+              {data && (
+                <Box>
+                  <DataTable
+                    data={data.chi_square_test}
+                    headings={chiHeadings}
+                  />
+                </Box>
+              )}
             </Tab>
-            <Tab title="correlarion">
-              <Paragraph margin="none">
-                Tab content should be flush with the left edge of the Tab. A
-                "medium" vertical padding should be applied to create space
-                between the Tab and its content.
-              </Paragraph>
+            <Tab title="correlation" onClick={onSelect}>
+              {data && (
+                <Box>
+                  <CorrelationDataTable
+                    data={data.correlation}
+                    headings={correlationHeadings}
+                  />
+                </Box>
+              )}
             </Tab>
           </Tabs>
         </Box>

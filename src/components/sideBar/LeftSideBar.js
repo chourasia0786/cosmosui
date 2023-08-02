@@ -18,10 +18,9 @@ const LeftSideBar = (props) => {
   });
 
   const [selected, setSelected] = useState(props.sidebaroptions[0].name);
-  const navigateFunction = () => {
-    props.setSelected(false);
-    props.onExit(false);
-    navigate(`/dashboard/Solution/${props.sidebaroptions[0].name}`);
+  const proceed = () => {
+    props.changeShow();
+    // localStorage.clear();
   };
 
   return (
@@ -55,7 +54,7 @@ const LeftSideBar = (props) => {
               gap='small'
               label='Proceed'
               primary
-              onClick={props.changeShow}
+              onClick={proceed}
             />
           )}
         </Box>
