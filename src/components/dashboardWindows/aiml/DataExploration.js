@@ -63,12 +63,12 @@ const DataExploration = () => {
     "Point Earned",
   ];
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   const onSelect = () => {
-    fetchData();
+    // fetchData();
   };
 
   const fetchData = async () => {
@@ -76,6 +76,7 @@ const DataExploration = () => {
       const response = await axios.get("http://localhost:5000/eda"); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
       setData(response.data);
       setShowSpinner(false);
+      setStartBtnDisable(true);
       // console.log("Printing............. : ", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -84,6 +85,7 @@ const DataExploration = () => {
 
   const startProcess = () => {
     // handleSpinner();
+    fetchData();
     setShowSpinner(true);
     setStartProcessSatus(true);
     ctx.setActivePageNumber(1);

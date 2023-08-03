@@ -10,22 +10,22 @@ const HorizontalTimeLine = () => {
 
   return (
     <Box align="center">
-      <div class="timeline">
-        <div class="line-default"></div>
+      <div className="timeline">
+        <div className="line-default"></div>
         {ctx.selected >= 2 ? (
-          <div class="line-active"></div>
+          <div className="line-active"></div>
         ) : (
-          <div class="line-default"></div>
+          <div className="line-default"></div>
         )}
 
         {ctx.selected >= 3 ? (
-          <div class="line-active-full"></div>
+          <div className="line-active-full"></div>
         ) : ctx.selected >= 2 ? (
-          <div class="line-active"></div>
+          <div className="line-active"></div>
         ) : (
-          <div class="line-default"></div>
+          <div className="line-default"></div>
         )}
-        <ul class="timelinecheck">
+        <ul className="timelinecheck">
           <li>
             <div
               className={ctx.selected >= 1 ? "checkActive" : "checkCircle"}

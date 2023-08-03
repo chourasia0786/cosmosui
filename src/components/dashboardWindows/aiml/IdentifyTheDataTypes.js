@@ -10,16 +10,15 @@ const IdentifyTheDataTypes = () => {
   const [startBtnDisable, setStartBtnDisable] = useState(false);
   const [data, setData] = useState("");
   const [startProcessSatus, setStartProcessSatus] = useState(false);
-  // const [parsedData, setParsedData] = useState();
 
   const dataTypeHeadings = [
     "Columns",
     "Data_types",
   ]
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   const fetchData = async () => {
     try {
@@ -27,6 +26,7 @@ const IdentifyTheDataTypes = () => {
       setData(JSON.parse(response.data.data_types));
       // setData(response.data.data_types);
       setShowSpinner(false);
+      setStartBtnDisable(true);
       console.log("Printing............. : ", data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -64,25 +64,29 @@ const IdentifyTheDataTypes = () => {
       </Box>
 
       {startProcessSatus && (
-        <Box margin={{ top: 'large' }}><table >
-          <thead >
-            <tr>
-              <td style={{ padding: "30px" }}></td>
-              <td style={{ padding: "15px" }}><b>{dataTypeHeadings[0]}</b></td>
-              <td style={{ padding: "15px" }}><b>{dataTypeHeadings[1]}</b></td>
-            </tr>
-          </thead>
-
-          <tbody>
-            {Object.entries(data).map(([key, value]) => (
-                <tr key={key}>
-                <td style={{ padding: "15px" }} ><b>{key}</b></td>
-                <td style={{ padding: "15px" }} >{value.Columns}</td>
-                <td style={{ padding: "15px" }} >{value.Data_types}</td>           
+        <Box margin={{ top: 'large' }}>
+           <div width="400px" style={{padding:"5px"}}>
+          <table style={{ width: '60%'}}>
+            <thead >
+              <tr style={{ fontSize: '14px' }}>
+                <th style={{width:'50px'}}></th>
+                <th ><b>{dataTypeHeadings[0]}</b></th>
+                <th ><b>{dataTypeHeadings[1]}</b></th>
               </tr>
-            ))}
-          </tbody>
-        </table></Box>)
+            </thead>
+
+            <tbody>
+              {Object.entries(data).map(([key, value]) => (
+                <tr key={key}>
+                  <td style={{ padding: "5px", fontSize: '15px' }}><b>{key}</b></td>
+                  <td style={{ padding: "5px", fontSize: '13px' }} >{value.Columns}</td>
+                  <td style={{ padding: "5px", fontSize: '13px' }} >{value.Data_types}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          </div>
+           </Box>)
       }
 
       {showSpinner && (
