@@ -63,12 +63,12 @@ const DataExploration = () => {
     "Point Earned",
   ];
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   const onSelect = () => {
-    fetchData();
+    // fetchData();
   };
 
   const fetchData = async () => {
@@ -85,6 +85,7 @@ const DataExploration = () => {
 
   const startProcess = () => {
     // handleSpinner();
+    fetchData();
     setShowSpinner(true);
     setStartProcessSatus(true);
     ctx.setActivePageNumber(1);

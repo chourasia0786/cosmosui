@@ -69,7 +69,7 @@ const IdentifyTheDataTypes = () => {
           <table style={{ width: '60%'}}>
             <thead >
               <tr style={{ fontSize: '14px' }}>
-                <th ></th>
+                <th style={{width:'50px'}}></th>
                 <th ><b>{dataTypeHeadings[0]}</b></th>
                 <th ><b>{dataTypeHeadings[1]}</b></th>
               </tr>
