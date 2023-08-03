@@ -2,41 +2,37 @@ import React from "react";
 
 const CorrelationDataTable = (props) => {
   const parsedData = JSON.parse(props.data);
-  // console.log("data: ", JSON.parse(props.data)) 
-  // console.log("heading: ", props.headings)
+
   return (
-    <div>
-      <table >
+    <div width="400px" style={{ padding: "5px" }}>
+      <table style={{ width: '100%' }}>
         <thead >
-          <tr>
-            <td style={{ padding: "30px" }}></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[0]}</b></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[1]}</b></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[2]}</b></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[3]}</b></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[4]}</b></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[5]}</b></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[6]}</b></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[7]}</b></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[8]}</b></td>
-            <td style={{ padding: "15px" }}><b>{props.headings[9]}</b></td>
+          <tr style={{ fontSize: '14px' }}>
+            <th ></th>
+            <th ><b>{props.headings[0]}</b></th>
+            <th ><b>{props.headings[1]}</b></th>
+            <th ><b>{props.headings[2]}</b></th>
+            <th ><b>{props.headings[3]}</b></th>
+            <th ><b>{props.headings[4]}</b></th>
+            <th ><b>{props.headings[5]}</b></th>
+            <th ><b>{props.headings[6]}</b></th>
+            <th ><b>{props.headings[7]}</b></th>
+            
           </tr>
         </thead>
 
         <tbody>
           {Object.entries(parsedData).map(([key, value]) => (
             <tr key={key}>
-              <td style={{ padding: "15px" }}><b>{key}</b></td>
-              <td style={{ padding: "15px" }} >{value[props.headings[0]]}</td>
-              <td style={{ padding: "15px" }} >{value[props.headings[1]]}</td>
-              <td style={{ padding: "15px" }} >{value[props.headings[2]]}</td>
-              <td style={{ padding: "15px" }} >{value[props.headings[3]]}</td>
-              <td style={{ padding: "15px" }} >{value[props.headings[4]]}</td>
-              <td style={{ padding: "15px" }} >{value[props.headings[5]]}</td>
-              <td style={{ padding: "15px" }} >{value[props.headings[6]]}</td>
-              <td style={{ padding: "15px" }} >{value[props.headings[7]]}</td>
-              <td style={{ padding: "15px" }} >{value[props.headings[8]]}</td>
-              <td style={{ padding: "15px" }} >{value[props.headings[9]]}</td>
+              <td style={{ padding: "5px", fontSize: '14px' }}><b>{key}</b></td>
+              <td style={{ padding: "5px", fontSize: '12px' }} >{value[props.headings[0]]}</td>
+              <td style={{ padding: "5px", fontSize: '12px' }} >{value[props.headings[1]]}</td>
+              <td style={{ padding: "5px", fontSize: '12px' }} >{value[props.headings[2]]}</td>
+              <td style={{ padding: "5px", fontSize: '12px' }} >{value[props.headings[3]]}</td>
+              <td style={{ padding: "5px", fontSize: '12px' }} >{value[props.headings[4]]}</td>
+              <td style={{ padding: "5px", fontSize: '12px' }} >{value[props.headings[5]]}</td>
+              <td style={{ padding: "5px", fontSize: '12px' }} >{value[props.headings[6]]}</td>
+              <td style={{ padding: "5px", fontSize: '12px' }} >{value[props.headings[7]]}</td>
             </tr>
           ))}
 
