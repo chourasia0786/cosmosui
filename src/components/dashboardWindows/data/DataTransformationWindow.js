@@ -10,8 +10,6 @@ import {
 } from 'grommet';
 import Chatbot from 'src/components/Chatbot/Chatbot';
 
-import { dataTransformationOptions } from '../../../config/dataTransformationOptions';
-import LeftSideBar from '../../sideBar/LeftSideBar';
 import RightSideBar from '../../sideBar/RightSideBar';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
