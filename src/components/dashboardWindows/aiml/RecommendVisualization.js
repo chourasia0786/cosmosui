@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { FormNext } from "grommet-icons";
+import { FormNext, FormDown } from "grommet-icons";
 import axios from "axios";
 import {
   Box,
@@ -11,6 +11,7 @@ import {
   Tabs,
   Layer,
   Spinner,
+  Menu,
 } from "grommet";
 
 import ActivePageContext from "./ActivePageContext";
@@ -25,28 +26,73 @@ const RecommendVisualization = () => {
   const [startProcessSatus, setStartProcessSatus] = useState(false);
   const [startBtnDisable, setStartBtnDisable] = useState(false);
   const ctx = useContext(ActivePageContext);
-  const [data, setData] = useState("");
+  const [univariateData, setUnivariateData] = useState("");
+  const [bivariateData, setBivariateData] = useState("");
+  const [multivariateData, setMultivariateData] = useState("");
 
   const univariateHeadings = ["Column_names", "Data_Types", "viz_chart"];
 
   const bivariateHeadings = ["Column_1", "Column_2", "chart"];
 
-  const correlationHeadings = ["Column_1", "Column_2", "Column_3", "chart"];
+  const [multivariateHeadings, setMultivariateHeadings] = useState([
+    "Column_1",
+    "Column_2",
+    "Column_3",
+    "chart",
+  ]);
 
-  useEffect(() => {
+  const univariate = () => {
     fetchData1();
-  }, []);
+  };
 
-  const onSelect = () => {
-    fetchData1();
+  const bivariate = () => {
+    fetchData2();
+  };
+
+  const multivariate_1 = (e) => {
+    setMultivariateHeadings(["Column_1", "Column_2", "Column_3", "chart"]);
+    fetchData3_1("multivariate_viz");
+  };
+
+  const multivariate_2 = (e) => {
+    setMultivariateHeadings([
+      "Column_1",
+      "Column_2",
+      "Column_3",
+      "Column_4",
+      "chart",
+    ]);
+    fetchData3_2("multivariate_viz_1");
+  };
+
+  const multivariate_3 = (e) => {
+    setMultivariateHeadings([
+      "Column_1",
+      "Column_2",
+      "Column_3",
+      "Column_4",
+      "Column_5",
+      "Column_6",
+      "Column_7",
+      "Column_8",
+      "charts",
+      "Column_9",
+      "Column_10",
+    ]);
+    fetchData3_3("multivariate_viz_2");
+  };
+
+  const handleOptionSelect = (event) => {
+    console.log("selected options: " + event);
   };
 
   const fetchData1 = async () => {
     try {
       const response = await axios.get("http://localhost:5000/univariate_viz"); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
-      setData(response.data);
+      setUnivariateData(response.data);
       setShowSpinner(false);
-      console.log("Printing............. : ", response.data);
+      setStartBtnDisable(true);
+      console.log("Printing1............. : ", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -55,22 +101,46 @@ const RecommendVisualization = () => {
   const fetchData2 = async () => {
     try {
       const response = await axios.get("http://localhost:5000/bivariate_viz"); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
-      setData(response.data);
+      setBivariateData(response.data);
       setShowSpinner(false);
-      console.log("Printing............. : ", response.data);
+      setStartBtnDisable(true);
+      console.log("Printing2............. : ", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  const fetchData3 = async () => {
+  const fetchData3_1 = async (event) => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/multivariate_viz"
-      ); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
-      setData(response.data);
+      const response = await axios.get(`http://localhost:5000/${event}`); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
+      setMultivariateData(response.data.multi_variate);
+      setStartBtnDisable(true);
       setShowSpinner(false);
-      console.log("Printing............. : ", response.data);
+      console.log("Printing3............. : ", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const fetchData3_2 = async (event) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/${event}`); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
+
+      setMultivariateData(response.data.multi_variate_1);
+      setStartBtnDisable(true);
+      setShowSpinner(false);
+      console.log("Printing3............. : ", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const fetchData3_3 = async (event) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/${event}`); // Replace <YOUR_API_URL> with the actual API endpoint to fetch data
+
+      setMultivariateData(response.data.multi_variate_2);
+      setStartBtnDisable(true);
+      setShowSpinner(false);
+      console.log("Printing3_3............. : ", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -78,6 +148,7 @@ const RecommendVisualization = () => {
 
   const startProcess = () => {
     // handleSpinner();
+    fetchData1();
     setShowSpinner(true);
     setStartProcessSatus(true);
     ctx.setActivePageNumber(3);
@@ -108,29 +179,61 @@ const RecommendVisualization = () => {
       {startProcessSatus && (
         <Box margin={{ top: "large" }}>
           <Tabs activeIndex={index} onActive={onActive} justify="start">
-            <Tab title="Univariate" onClick={onSelect}>
-              {data && (
+            <Tab title="Univariate" onClick={univariate}>
+              {univariateData && (
                 <Box>
-                  <Univariate data={data.stats} headings={univariateHeadings} />
+                  <Univariate
+                    data={univariateData.univariate}
+                    headings={univariateHeadings}
+                  />
                 </Box>
               )}
             </Tab>
-            <Tab title="Bivariate" onClick={onSelect}>
-              {data && (
+            <Tab title="Bivariate" onClick={bivariate}>
+              {bivariateData && (
                 <Box>
                   <Bivariate
-                    data={data.chi_square_test}
+                    data={bivariateData.bi_variate}
                     headings={bivariateHeadings}
                   />
                 </Box>
               )}
             </Tab>
-            <Tab title="Multivariate" onClick={onSelect}>
-              {data && (
+            <Tab
+              title={
+                <Menu
+                  label={
+                    <span style={{ fontWeight: "normal" }}>Multivariate</span>
+                  }
+                  items={[
+                    {
+                      label: "Multivariate_1",
+                      onClick: (e) => {
+                        multivariate_1(e);
+                      },
+                    },
+                    {
+                      label: "Multivariate_2",
+                      onClick: (e) => {
+                        multivariate_2(e);
+                      },
+                    },
+                    {
+                      label: "Multivariate_3",
+                      onClick: (e) => {
+                        multivariate_3(e);
+                      },
+                    },
+                  ]}
+                  width="medium"
+                />
+              }
+            >
+              {multivariateData && (
                 <Box>
                   <Multivariate
-                    data={data.correlation}
-                    headings={correlationHeadings}
+                    data={multivariateData}
+                    headings={multivariateHeadings}
                   />
                 </Box>
               )}
