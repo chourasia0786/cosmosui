@@ -66,7 +66,7 @@ const IdentifyTheDataTypes = () => {
       {startProcessSatus && (
         <Box margin={{ top: 'large' }}>
            <div width="400px" style={{padding:"5px"}}>
-          <table style={{ width: '60%'}}>
+          <table style={{ width: '40%'}}>
             <thead >
               <tr style={{ fontSize: '14px' }}>
                 <th style={{width:'50px'}}></th>
