@@ -11,6 +11,7 @@ import AimlDashboard from "../components/dashboardWindows/aiml/AimlDashboard";
 import DataExploration from "src/components/dashboardWindows/aiml/DataExploration";
 import JointPage from "../pages/JointPage";
 import IdentifyTheDataTypes from "src/components/dashboardWindows/aiml/IdentifyTheDataTypes";
+import RecommendVisualization from "src/components/dashboardWindows/aiml/RecommendVisualization";
 
 const AppRoutes = () => {
   return (
@@ -77,7 +78,7 @@ const AppRoutes = () => {
         element={
           <Dashboard>
             <AimlDashboard>
-              {/* <IdentifyTheDataTypes></IdentifyTheDataTypes> */}
+              <RecommendVisualization></RecommendVisualization>
             </AimlDashboard>
           </Dashboard>
         }

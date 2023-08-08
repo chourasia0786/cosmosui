@@ -126,6 +126,7 @@ const LeftSideBar = (props) => {
       <Box
         fill="horizontal"
         justify="center"
+        align="center"
         style={{
           borderBottom: ctx.selected == "3" ? "2px solid #17EBA0" : "1px solid",
           cursor: "pointer",
