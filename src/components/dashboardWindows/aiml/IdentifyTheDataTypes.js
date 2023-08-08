@@ -3,6 +3,7 @@ import { Box, Button, Text, Spinner, Layer } from "grommet";
 import { FormNext } from "grommet-icons";
 import ActivePageContext from "./ActivePageContext";
 import axios from "axios";
+import SpinnerDashboard from "./SpinnerDashboard";
 
 const IdentifyTheDataTypes = () => {
   const [showSpinner, setShowSpinner] = useState(false);
@@ -91,20 +92,7 @@ const IdentifyTheDataTypes = () => {
 
       {showSpinner && (
         <Box>
-          <Layer model>
-            <Box pad="small" alignContent="center">
-              <Text>In Progress</Text>
-              <Box align="center">
-                <Spinner
-                  message={{
-                    start: "Loading data.",
-                    end: "Data has been loaded.",
-                  }}
-                />
-              </Box>
-              <Text alignSelf="center">24%</Text>
-            </Box>
-          </Layer>
+          <SpinnerDashboard/>
         </Box>
       )}
     </Box>

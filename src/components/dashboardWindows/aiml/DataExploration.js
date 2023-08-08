@@ -17,7 +17,8 @@ import ActivePageContext from "./ActivePageContext";
 import DataTable from "./Chi_square_test";
 import CorrelationDataTable from "./Correlation";
 import StatsDataTable from "./stats";
-import TableCustomizationExample from "./DataTable";
+import SpinnerDashboard from "./SpinnerDashboard";
+
 
 const DataExploration = () => {
   const [index, setIndex] = useState();
@@ -27,6 +28,7 @@ const DataExploration = () => {
   const [startBtnDisable, setStartBtnDisable] = useState(false);
   const ctx = useContext(ActivePageContext);
   const [data, setData] = useState("");
+  
 
   const edaHeadings = [
     "Unnamed",
@@ -151,20 +153,7 @@ const DataExploration = () => {
 
       {showSpinner && (
         <Box>
-          <Layer model>
-            <Box pad="small" alignContent="center">
-              <Text>In Progress</Text>
-              <Box align="center">
-                <Spinner
-                  message={{
-                    start: "Loading data.",
-                    end: "Data has been loaded.",
-                  }}
-                />
-              </Box>
-              <Text alignSelf="center">24%</Text>
-            </Box>
-          </Layer>
+          <SpinnerDashboard/>
         </Box>
       )}
     </Box>
