@@ -17,6 +17,7 @@ import ActivePageContext from "./ActivePageContext";
 import DataTable from "./Chi_square_test";
 import CorrelationDataTable from "./Correlation";
 import StatsDataTable from "./stats";
+import SpinnerDashboard from "./SpinnerDashboard";
 
 const DataExploration = () => {
   const [index, setIndex] = useState();
@@ -116,14 +117,15 @@ const DataExploration = () => {
       {startProcessSatus && (
         <Box margin={{ top: "large" }}>
           <Tabs activeIndex={index} onActive={onActive} justify="start">
-            <Tab title="eda_state" onClick={onSelect}>
+            <Tab title="eda_state">
               {data && (
                 <Box>
+                  {/* <TableCustomizationExample data={data.stats} headings={edaHeadings}/> */}
                   <StatsDataTable data={data.stats} headings={edaHeadings} />
                 </Box>
               )}
             </Tab>
-            <Tab title="chi_square_results" onClick={onSelect}>
+            <Tab title="chi_square_results">
               {data && (
                 <Box>
                   <DataTable
@@ -133,7 +135,7 @@ const DataExploration = () => {
                 </Box>
               )}
             </Tab>
-            <Tab title="correlation" onClick={onSelect}>
+            <Tab title="correlation">
               {data && (
                 <Box>
                   <CorrelationDataTable
@@ -149,20 +151,7 @@ const DataExploration = () => {
 
       {showSpinner && (
         <Box>
-          <Layer model>
-            <Box pad="small" alignContent="center">
-              <Text>In Progress</Text>
-              <Box align="center">
-                <Spinner
-                  message={{
-                    start: "Loading data.",
-                    end: "Data has been loaded.",
-                  }}
-                />
-              </Box>
-              <Text alignSelf="center">24%</Text>
-            </Box>
-          </Layer>
+          <SpinnerDashboard />
         </Box>
       )}
     </Box>

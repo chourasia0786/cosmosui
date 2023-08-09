@@ -18,6 +18,7 @@ import ActivePageContext from "./ActivePageContext";
 import Bivariate from "./Bivariate";
 import Multivariate from "./Multivariate";
 import Univariate from "./Univariate";
+import SpinnerDashboard from "./SpinnerDashboard";
 
 const RecommendVisualization = () => {
   const [index, setIndex] = useState();
@@ -244,20 +245,7 @@ const RecommendVisualization = () => {
 
       {showSpinner && (
         <Box>
-          <Layer model>
-            <Box pad="small" alignContent="center">
-              <Text>In Progress</Text>
-              <Box align="center">
-                <Spinner
-                  message={{
-                    start: "Loading data.",
-                    end: "Data has been loaded.",
-                  }}
-                />
-              </Box>
-              <Text alignSelf="center">24%</Text>
-            </Box>
-          </Layer>
+          <SpinnerDashboard/>
         </Box>
       )}
     </Box>
