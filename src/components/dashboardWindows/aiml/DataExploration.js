@@ -19,7 +19,6 @@ import CorrelationDataTable from "./Correlation";
 import StatsDataTable from "./stats";
 import SpinnerDashboard from "./SpinnerDashboard";
 
-
 const DataExploration = () => {
   const [index, setIndex] = useState();
   const onActive = (nextIndex) => setIndex(nextIndex);
@@ -28,7 +27,6 @@ const DataExploration = () => {
   const [startBtnDisable, setStartBtnDisable] = useState(false);
   const ctx = useContext(ActivePageContext);
   const [data, setData] = useState("");
-  
 
   const edaHeadings = [
     "Unnamed",
@@ -153,7 +151,7 @@ const DataExploration = () => {
 
       {showSpinner && (
         <Box>
-          <SpinnerDashboard/>
+          <SpinnerDashboard />
         </Box>
       )}
     </Box>
